@@ -104,8 +104,15 @@
 
       } else {
         // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
-        canvas.style.width = "1920px";
-        canvas.style.height = "1080px";
+        // 1920x1080 고정이면 작은 화면에서 게임이 잘린다. 16:9 비율을 유지하며
+        // 창 크기에 맞춰 축소하고, 리사이즈에도 따라가게 한다.
+        var fitCanvas = function () {
+          var scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+          canvas.style.width = Math.round(1920 * scale) + "px";
+          canvas.style.height = Math.round(1080 * scale) + "px";
+        };
+        fitCanvas();
+        window.addEventListener("resize", fitCanvas);
       }
 
       document.querySelector("#unity-loading-bar").style.display = "block";
